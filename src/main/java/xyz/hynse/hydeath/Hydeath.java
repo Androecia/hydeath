@@ -1,5 +1,9 @@
 package xyz.hynse.hydeath;
 
+import java.io.File;
+import java.util.Objects;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,8 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.Objects;
+import net.kyori.adventure.text.Component;
 
 public final class Hydeath extends JavaPlugin implements Listener {
 
@@ -28,6 +31,7 @@ public final class Hydeath extends JavaPlugin implements Listener {
     private boolean glowing;
     private boolean unlimitedLifetime;
     private int expDropPercent;
+    private boolean sendGlobalMessage;
 
     @Override
     public void onEnable() {
@@ -55,6 +59,7 @@ public final class Hydeath extends JavaPlugin implements Listener {
             invulnerable = itemSettingsSection.getBoolean("invulnerable", true);
             glowing = itemSettingsSection.getBoolean("glowing", true);
             unlimitedLifetime = itemSettingsSection.getBoolean("unlimitedLifetime", true);
+            sendGlobalMessage = itemSettingsSection.getBoolean("sendGlobalMessage", true);
         }
     }
     @Override
@@ -108,14 +113,21 @@ public final class Hydeath extends JavaPlugin implements Listener {
         }
 
         // Get the default death message from the event
-        String defaultDeathMessage = event.getDeathMessage();
-
+        String defaultDeathMessage = event.deathMessage().toString();
+        
         // Create the custom death message
         String deathMessage = color1 + deathSymbol + " " + color4 + defaultDeathMessage + "\n" + color3 + text2nd + " [" + worldcolor + formattedWorldName + color3 + ": " + ChatColor.RESET + worldcolor2 + x + color3 + ", " + worldcolor2 + y + color3 + ", " + worldcolor2 + z + color3 + "]";
 
-        // Set the custom death message
-        event.setDeathMessage(deathMessage);
-
+        if (sendGlobalMessage) {
+            event.deathMessage(null);
+            Bukkit.getServer().broadcast(Component.text(deathMessage), "hydeath.death");
+        } else {
+            event.deathMessage(Component.text(defaultDeathMessage));
+            player.sendMessage(deathMessage);
+        }
+        
+        // Send the custom death message to the player
+        
         // Store the player's inventory contents
         ItemStack[] originalInventory = player.getInventory().getContents();
 

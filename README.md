@@ -12,5 +12,6 @@ itemSettings:
   invulnerable: true   # Make dropped items invulnerable
   glowing: true        # Make dropped items glow
   unlimitedLifetime: true  # Make dropped items never despawn
+  sendGlobalMessage: true  # Send a global message when a player dies
 ```
 Credit: [Easy Deaths](https://github.com/ringprod/easy-deaths)

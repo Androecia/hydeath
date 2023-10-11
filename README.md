@@ -1,5 +1,12 @@
 Hydeath is an essential plugin designed for Spigot, Paper, and Folia servers. It significantly enhances the gameplay experience by mitigating the frustration of losing items upon death, making the process of recovering lost items seamless and efficient.
 
+## To Build (Linux)
+```
+git clone https://github.com/Androecia/hydeath.git
+cd hydeath
+./gradlew build
+```
+
 ### config.yml
 ```yml
 # Spread amount for dropped items
